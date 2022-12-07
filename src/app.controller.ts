@@ -9,7 +9,7 @@ export class AppController {
   @Get()
   @Render('list')
   async listPaintings() {
-    const [rows] = await db.execute('SELECT title FROM backend.paintings');
+    const [rows] = await db.execute('SELECT title FROM paintings');
     return {
       paintings: rows,
     };
