@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Query,
+  Redirect,
   Render,
 } from '@nestjs/common';
 import { AppService } from './app.service';
@@ -27,7 +28,7 @@ export class AppController {
     };
   }
 
-  @Get('painting/:id')
+  @Get('paintings/:id')
   @Render('show')
   async showPainting(@Param('id') id: number) {
     const [rows] = await db.execute(
@@ -44,11 +45,12 @@ export class AppController {
   }
 
   @Post('paintings/new')
+  @Redirect()
   async newPainting(@Body() painting: PaintingDto) {
-    await db.execute(
+    const [result]: any = await db.execute(
       'INSERT INTO `paintings` (`title`, `year`, `on_display`) values (?, ?, ?)',
       [painting.title, painting.year, painting.on_display],
     );
-    return 'OK';
+    return { url: '/paintings/' + result.insertId };
   }
 }
