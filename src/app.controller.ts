@@ -32,7 +32,7 @@ export class AppController {
   @Render('show')
   async showPainting(@Param('id') id: number) {
     const [rows] = await db.execute(
-      'SELECT title, year, on_display FROM paintings Where id = ?',
+      'SELECT id, title, year, on_display FROM paintings Where id = ?',
       [id],
     );
     return { painting: rows[0] };
@@ -42,7 +42,7 @@ export class AppController {
   @Redirect()
   async deletePainting(@Param('id') id) {
     const [result]: any = await db.execute(
-      'DELETE FROM paintings WHERE id =?',
+      'DELETE FROM paintings WHERE id = ?',
       [id],
     );
     return { url: '/' };
