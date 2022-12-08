@@ -32,7 +32,7 @@ export class AppController {
   @Render('show')
   async showPainting(@Param('id') id: number) {
     const [rows] = await db.execute(
-      'SELECT id, title, year, on_display FROM paintings Where id = ?',
+      'SELECT id, title, year, on_display FROM paintings WHERE id = ?',
       [id],
     );
     return { painting: rows[0] };
@@ -46,6 +46,13 @@ export class AppController {
       [id],
     );
     return { url: '/' };
+  }
+
+  @Get('paintings/:id/update')
+  @Render('edit.ejs')
+  async updatePainting(@Param('id') id){
+    const [rows]:any = await db.execute('SELECT id, title, year, on_display FROM paintings');
+    return {painting: rows};
   }
 
   @Get('paintings/new')
