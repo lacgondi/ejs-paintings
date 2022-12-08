@@ -48,11 +48,27 @@ export class AppController {
     return { url: '/' };
   }
 
-  @Get('paintings/:id/update')
+  @Get('paintings/:id/updateForm')
   @Render('edit.ejs')
-  async updatePainting(@Param('id') id){
-    const [rows]:any = await db.execute('SELECT id, title, year, on_display FROM paintings');
-    return {painting: rows};
+  async updatePaintingForm() {
+    const [rows]: any = await db.execute(
+      'SELECT id, title, year, on_display FROM paintings',
+    );
+    return { painting: rows[0] };
+  }
+  @Post('paintings/:id/update')
+  @Redirect()
+  async updatePainting(@Param('id') id, @Body() updatedPainting: PaintingDto) {
+    const [result]: any = await db.execute(
+      'UPDATE paintings SET `title` = ?, `year` = ?, `on_display`=? WHERE `id` = ?',
+      [
+        updatedPainting.title,
+        updatedPainting.year,
+        updatedPainting.on_display,
+        id,
+      ],
+    );
+    return { url: '/' };
   }
 
   @Get('paintings/new')
