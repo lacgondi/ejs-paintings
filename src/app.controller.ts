@@ -38,6 +38,16 @@ export class AppController {
     return { painting: rows[0] };
   }
 
+  @Post('paintings/:id/delete')
+  @Redirect()
+  async deletePainting(@Param('id') id) {
+    const [result]: any = await db.execute(
+      'DELETE FROM paintings WHERE id =?',
+      [id],
+    );
+    return { url: '/' };
+  }
+
   @Get('paintings/new')
   @Render('form')
   newPaintingForm() {
